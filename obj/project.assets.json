@@ -8,19 +8,19 @@
     "net10.0": []
   },
   "packageFolders": {
-    "C:\\Users\\vitri\\.nuget\\packages\\": {}
+    "C:\\Users\\VivekOffice\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Programming\\Interview\\ASP\\MVC\\MVC.csproj",
+      "projectUniqueName": "D:\\Vivek\\Programing\\Interview Practices\\ASP Dot Net\\FirstMVC\\FirstMVC-1\\MVC.csproj",
       "projectName": "MVC",
-      "projectPath": "D:\\Programming\\Interview\\ASP\\MVC\\MVC.csproj",
-      "packagesPath": "C:\\Users\\vitri\\.nuget\\packages\\",
-      "outputPath": "D:\\Programming\\Interview\\ASP\\MVC\\obj\\",
+      "projectPath": "D:\\Vivek\\Programing\\Interview Practices\\ASP Dot Net\\FirstMVC\\FirstMVC-1\\MVC.csproj",
+      "packagesPath": "C:\\Users\\VivekOffice\\.nuget\\packages\\",
+      "outputPath": "D:\\Vivek\\Programing\\Interview Practices\\ASP Dot Net\\FirstMVC\\FirstMVC-1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\vitri\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\VivekOffice\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
