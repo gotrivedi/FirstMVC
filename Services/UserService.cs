@@ -19,5 +19,6 @@ public class UserService
         var users = JsonSerializer.Deserialize<List<User>>(json, options);
 
         return users?.Take(50).ToList() ?? new List<User>();
+
     }
 }
