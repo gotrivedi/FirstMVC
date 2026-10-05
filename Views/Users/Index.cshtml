@@ -2,6 +2,15 @@
 
 <h1>Users</h1>
 
+ @if (TempData["Message"] != null)
+                    {
+                        <p>@TempData["Message"]</p>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <p>@TempData["Error"]</p>
+                    }
+                    
 <table>
     <thead>
         <tr>
@@ -18,6 +27,18 @@
                 <td>@user.Id</td>
                 <td>@user.Name</td>
                 <td>@user.Email</td>
+                <td>
+                    <a href="/Users/Details/@user.Id">View Details</a>
+                </td>
+                <td>
+                    <a href="/Users/Edit/@user.Id">Edit</a>
+                </td>
+                <td>
+                    <form method="post" action="/Users/Delete/@user.Id">
+                    <button type="submit">Delete</button>
+                    </form>
+                </td>
+                     
             </tr>
         }
     </tbody>

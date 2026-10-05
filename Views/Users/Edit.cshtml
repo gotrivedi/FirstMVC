@@ -1,0 +1,11 @@
+@model UserManagment.Models.User
+
+<h1>Edit User</h1>
+
+<form method="post">
+<p><strong>Id:</strong> @Model.Id</p>
+<p>Name: <input asp-for="@Model.Name"></p>
+<p>Email: <input asp-for="@Model.Email"></p>
+
+<button type="submit">Save</button>
+</form>
