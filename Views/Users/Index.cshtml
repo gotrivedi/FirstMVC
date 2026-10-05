@@ -2,14 +2,14 @@
 
 <h1>Users</h1>
 
- @if (TempData["Message"] != null)
-                    {
-                        <p>@TempData["Message"]</p>
-                    }
-                    @if (TempData["Error"] != null)
-                    {
-                        <p>@TempData["Error"]</p>
-                    }
+@if (TempData["Message"] != null)
+{
+    <p>@TempData["Message"]</p>
+}
+@if (TempData["Error"] != null)
+{
+    <p>@TempData["Error"]</p>
+}
                     
 <table>
     <thead>
@@ -35,7 +35,7 @@
                 </td>
                 <td>
                     <form method="post" action="/Users/Delete/@user.Id">
-                    <button type="submit">Delete</button>
+                        <button type="submit">Delete</button>
                     </form>
                 </td>
                      
