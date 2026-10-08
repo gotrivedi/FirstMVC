@@ -10,6 +10,15 @@ namespace UserManagment.Services;
 public class UserService
 {
     private readonly string _filePath = "Data/users.json";
+    private readonly ILogger<UserService> _logger;
+
+    public UserService(ILogger<UserService> logger)
+    {
+        Console.WriteLine("🔥 USER SERVICE CONSTRUCTOR CALLED");
+
+        Console.WriteLine($"Logger is null: {logger == null}");
+        _logger = logger;
+    }
 
     public List<User> GetAllUsers()
     {
@@ -42,7 +51,10 @@ public class UserService
     {
         var users = GetAllUsers();
 
-        var nextId = users.Count + 1;
+        var nextId = users
+    .Select(u => int.Parse(u.Id))
+    .DefaultIfEmpty(0)
+    .Max() + 1;
         user.Id = nextId.ToString();
 
         users.Add(user);
@@ -54,6 +66,7 @@ public class UserService
         });
 
         File.WriteAllText(_filePath, json);
+        _logger.LogInformation("User {Id} created successfully", user.Id);
     }
 
     public void EditUser(User user)

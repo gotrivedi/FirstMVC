@@ -2,15 +2,18 @@
 
 <h1>Create User</h1>
 
+
 <form method="post">
     <div>
         <label>Name</label>
         <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
     </div>
 
     <div>
         <label>Email</label>
         <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
     </div>
 
     <button type="submit">Create</button>

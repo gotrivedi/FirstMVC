@@ -8,10 +8,12 @@ namespace UserManagment.Controllers;
 public class UsersController : Controller
 {
     private readonly UserService _userService;
+    private readonly ILogger<UsersController> _logger;
 
-    public UsersController(UserService userService)
+    public UsersController(UserService userService, ILogger<UsersController> logger)
     {
         _userService = userService;
+        _logger = logger;
     }
 
     public IActionResult Index()
@@ -37,6 +39,13 @@ public class UsersController : Controller
     [HttpPost]
     public IActionResult Create(User user)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(user);
+        }
+
+        _logger.LogInformation("Creating user {Id} with email {Email}", user.Id, user.Email);
+
         _userService.AddUser(user);
         return RedirectToAction("Index");
     }
@@ -63,5 +72,10 @@ public class UsersController : Controller
 
 
         return RedirectToAction("Index");
+    }
+
+    public IActionResult TestError()
+    {
+        throw new Exception("This is a test exception");
     }
 }
