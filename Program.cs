@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
