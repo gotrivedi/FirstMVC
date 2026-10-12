@@ -2,13 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.ObjectPool;
 using UserManagment.Models;
 using UserManagment.Services;
+using System.Text.Json;
 
 namespace UserManagment.Controllers;
 
-public class UsersController : Controller
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
 {
     private readonly UserService _userService;
     private readonly ILogger<UsersController> _logger;
+
 
     public UsersController(UserService userService, ILogger<UsersController> logger)
     {
@@ -16,66 +20,68 @@ public class UsersController : Controller
         _logger = logger;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
         var users = _userService.GetUsers();
-
-        return View(users);
+        return Ok(users);
     }
 
-    public IActionResult Details(string id)
+    [HttpGet("{id}")]
+    public IActionResult GetUser(string id)
     {
-        var users = _userService.GetUsers();
-        var user = users.FirstOrDefault(u => u.Id == id);
-        return View(user);
+        var user = _userService.GetUsers().FirstOrDefault(u => u.Id == id);
+        if (user == null)
+            return NotFound();
 
-    }
-
-    public IActionResult Create()
-    {
-        return View();
+        return Ok(user);
     }
 
     [HttpPost]
-    public IActionResult Create(User user)
+    public IActionResult CreateUser(User user)
     {
-        if (!ModelState.IsValid)
-        {
-            return View(user);
-        }
+        string json = "\"hello\"";
 
-        _logger.LogInformation("Creating user {Id} with email {Email}", user.Id, user.Email);
+        JsonDocument doc = JsonDocument.Parse(json);
+        dynamic obj1 = new System.Dynamic.ExpandoObject();
+        obj1.Name = "Vivek";
+        obj1.Phone = "9966332255";
 
-        _userService.AddUser(user);
-        return RedirectToAction("Index");
+        Console.WriteLine(obj1.GetType());
+        Console.WriteLine(doc.GetType());
+        Console.WriteLine(doc.RootElement.ValueKind);
+        Console.WriteLine(doc.RootElement.GetString());
+        // _userService.AddUser(user);
+        return Ok(User);
     }
 
-    public IActionResult Edit(string Id)
+    [HttpPut]
+    public IActionResult EditUser(User user)
     {
-        return Details(Id);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(User user)
-    {
+        _logger.LogInformation(
+        "EditUser received: Id={Id}, Name={Name}, Email={Email}",
+        user.Id,
+        user.Name,
+        user.Email);
         _userService.EditUser(user);
-        return RedirectToAction("Index");
+        return Ok(user);
     }
 
-    [HttpPost]
-    public IActionResult Delete(String id)
+    [HttpDelete]
+    public IActionResult DeleteUser(string id)
     {
-        var success = _userService.DeleteUser(id);
+        var result = _userService.DeleteUser(id);
+        if (!result)
+            return NotFound();
 
-        TempData[success ? "Message" : "Error"] =
-        success ? "Deleted Successfully" : "Deletetion Failed";
-
-
-        return RedirectToAction("Index");
+        return NoContent();
     }
 
-    public IActionResult TestError()
+    [HttpPost("TestGeneric")]
+    public IActionResult TestGeneric([FromBody] JsonElement data)
     {
-        throw new Exception("This is a test exception");
+        Console.WriteLine(data.ValueKind);
+
+        return Ok();
     }
 }
