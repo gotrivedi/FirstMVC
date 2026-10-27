@@ -206,3 +206,4 @@ D:\Vivek\Programing\Interview Practices\ASP Dot Net\FirstMVC\FirstMVC-1\bin\Debu
 D:\Vivek\Programing\Interview Practices\ASP Dot Net\FirstMVC\FirstMVC-1\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Vivek\Programing\Interview Practices\ASP Dot Net\FirstMVC\FirstMVC-1\obj\Debug\net10.0\MVC.csproj.AssemblyReference.cache
 D:\Vivek\Programing\Interview Practices\ASP Dot Net\FirstMVC\FirstMVC-1\obj\Debug\net10.0\MVC.csproj.Up2Date
+D:\Vivek\Programing\Interview Practices\ASP Dot Net\FirstMVC\FirstMVC-1\bin\Debug\net10.0\Configuration\permissions.json

@@ -1,0 +1,3 @@
+{
+  "Permissions": ["Users.Read", "Users.Create", "Users.Update", "Users.Delete"]
+}

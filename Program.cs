@@ -6,6 +6,17 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddJsonFile(
+    "Configuration/permissions.json",
+    optional: false,
+    reloadOnChange: true
+);
+
+var permissions = builder.Configuration
+.GetSection("Permissions")
+.Get<string[]>();
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -54,41 +65,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         }
     };
 
-    // options.Events = new JwtBearerEvents
-    // {
-    //     OnAuthenticationFailed = context =>
-    //    {
-    //        Console.WriteLine(
-    //                $"JWT Authentication Failed: {context.Exception.Message}"
-    //            );
-
-    //        return Task.CompletedTask;
-    //    }
-    // };
-
 });
 
 builder.Services.AddAuthorization(options =>
-{
-    var permissions = new[]
-{
-    "Users.Read",
-    "Users.Create",
-    "Users.Update",
-    "Users.Delete"
-};
-
-    builder.Services.AddAuthorization(options =>
     {
         foreach (var permission in permissions)
         {
-            options.AddPolicy(permission, policy =>
-            {
-                policy.RequireClaim("permission", permission);
-            });
+            options.AddPolicy(
+                permission,
+                policy => policy.RequireClaim("permission", permission));
         }
     });
-});
 
 var app = builder.Build();
 
