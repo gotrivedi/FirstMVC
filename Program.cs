@@ -1,4 +1,9 @@
+using Microsoft.IdentityModel.Tokens;
 using UserManagment.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +11,84 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddHttpClient();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(options =>
+{
+
+    var secret = builder.Configuration["Jwt:Secret"];
+    var key = new SymmetricSecurityKey(Convert.FromBase64String(secret!));
+
+    options.MapInboundClaims = false;
+
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = key,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine(
+                $"JWT Authentication Failed: {context.Exception.Message}"
+            );
+
+            return Task.CompletedTask;
+        },
+
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine("JWT Token Validated");
+
+            foreach (var claim in context.Principal!.Claims)
+            {
+                Console.WriteLine($"{claim.Type} = {claim.Value}");
+            }
+
+            return Task.CompletedTask;
+        }
+    };
+
+    // options.Events = new JwtBearerEvents
+    // {
+    //     OnAuthenticationFailed = context =>
+    //    {
+    //        Console.WriteLine(
+    //                $"JWT Authentication Failed: {context.Exception.Message}"
+    //            );
+
+    //        return Task.CompletedTask;
+    //    }
+    // };
+
+});
+
+builder.Services.AddAuthorization(options =>
+{
+    var permissions = new[]
+{
+    "Users.Read",
+    "Users.Create",
+    "Users.Update",
+    "Users.Delete"
+};
+
+    builder.Services.AddAuthorization(options =>
+    {
+        foreach (var permission in permissions)
+        {
+            options.AddPolicy(permission, policy =>
+            {
+                policy.RequireClaim("permission", permission);
+            });
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -22,7 +105,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

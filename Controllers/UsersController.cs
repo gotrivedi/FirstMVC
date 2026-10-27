@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.ObjectPool;
 using UserManagment.Models;
 using UserManagment.Services;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace UserManagment.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
@@ -30,6 +31,7 @@ public class UsersController : ControllerBase
     [HttpGet("{id}")]
     public IActionResult GetUser(string id)
     {
+
         var user = _userService.GetUsers().FirstOrDefault(u => u.Id == id);
         if (user == null)
             return NotFound();
@@ -37,24 +39,17 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
+    [Authorize(Policy = "Users.Create")]
     [HttpPost]
     public IActionResult CreateUser(User user)
     {
-        string json = "\"hello\"";
 
-        JsonDocument doc = JsonDocument.Parse(json);
-        dynamic obj1 = new System.Dynamic.ExpandoObject();
-        obj1.Name = "Vivek";
-        obj1.Phone = "9966332255";
+        _userService.AddUser(user);
 
-        Console.WriteLine(obj1.GetType());
-        Console.WriteLine(doc.GetType());
-        Console.WriteLine(doc.RootElement.ValueKind);
-        Console.WriteLine(doc.RootElement.GetString());
-        // _userService.AddUser(user);
-        return Ok(User);
+        return Ok(user);
     }
 
+    [Authorize(Policy = "Users.Update")]
     [HttpPut]
     public IActionResult EditUser(User user)
     {
@@ -67,6 +62,8 @@ public class UsersController : ControllerBase
         return Ok(user);
     }
 
+
+    [Authorize(Policy = "Users.Delete")]
     [HttpDelete]
     public IActionResult DeleteUser(string id)
     {
